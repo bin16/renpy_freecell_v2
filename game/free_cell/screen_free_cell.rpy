@@ -91,7 +91,7 @@ init python:
 
 screen free_cell_card(card, col=12):
     drag:
-        id ("game_%s_free_cell_%s_%s" % (str(game.shuffle_count), str(card.suit), str(card.number)))
+        id ("game_%d_free_cell_%d_%d" % (game.shuffle_count, card.suit, card.number))
         draggable True
         drag_name card.name
         xpos game.xpos_of(col)
@@ -104,6 +104,7 @@ screen free_cell_card(card, col=12):
 
 screen free_cell_empty_cell(col=12):
     drag:
+        id ("game_%d_free_cell_empty_%d" % (game.shuffle_count, col))
         draggable False
         drag_name ("FREE:%d" % col)
         xpos game.xpos_of(col)

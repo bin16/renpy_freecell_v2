@@ -134,7 +134,7 @@ init python:
 
 screen tableau_card(card, col=0, row=0):
     drag:
-        id ("game_%s_tableau_%s_%s" % (str(game.shuffle_count), str(card.suit), str(card.number)))
+        id ("game_%d_tableau_%d_%d" % (game.shuffle_count, card.suit, card.number))
         drag_name card.name
         xpos game.xpos_of(col)
         ypos game.ypos_of(col, row)
@@ -150,6 +150,7 @@ screen tableau_card(card, col=0, row=0):
 
 screen tableau_empty_cell(col=0):
     drag:
+        id ("game_%d_tableau_empty_%d" % (game.shuffle_count, col))
         draggable False
         drag_name ("FREE:%d" % col)
         xpos game.xpos_of(col)

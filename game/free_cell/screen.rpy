@@ -2,6 +2,7 @@ default game = FreeCellGame()
 
 screen free_cell_game_screen():
     frame:
+        id ("free_cell_%s" % str(game.shuffle_count))
         xpadding 32
         ypadding 32
         xalign .5
@@ -67,6 +68,6 @@ screen free_cell_game_screen():
                                 #     text "%d" % len(col)
                                 textbutton "新游戏｜随机":
                                     action Function(game.shuffle)
-                                # textbutton "快速胜利":
-                                #     action Function(game.debug_quick_win)
+                                textbutton "DEBUG 快速胜利":
+                                    action Function(game.debug_quick_win)
                                 # text "shuffle_count: [game.shuffle_count]"

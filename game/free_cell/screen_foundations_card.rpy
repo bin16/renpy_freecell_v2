@@ -87,7 +87,7 @@ init python:
 screen foundations_card(card, col=12, row=0):
     # 回收区的牌全部堆叠展示，只有最上面那张可拖拽
     drag:
-        id ("game_%s_foundations_%s_%s" % (str(game.shuffle_count), str(card.suit), str(card.number)))
+        id ("game_%d_foundations_%d_%d" % (game.shuffle_count, card.suit, card.number))
         draggable (row == len(game.piles[col]) - 1)
         drag_name card.name
         xpos game.xpos_of(col)
@@ -97,12 +97,14 @@ screen foundations_card(card, col=12, row=0):
             # 只有最顶的牌可以响应拖拽和点击
             dragged handle_foundation_card_dragged(card, col)
             snapped handle_foundation_card_snapped(card, col)
+            # 禁用点击，但是允许用户手动拖回去
             # clicked handle_foundation_card_clicked(card, col)
 
         use paper_card(card)
 
 screen foundations_empty_cell(col=12):
     drag:
+        id ("game_%d_foundations_empty_%d" % (game.shuffle_count, col))
         draggable False
         drag_name ("FREE:%d" % col)
         xpos game.xpos_of(col)
