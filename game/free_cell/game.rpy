@@ -53,7 +53,7 @@ init python:
             ]
             self.shuffle_count += 1
             self.move_count = 0
-            renpy.retain_after_load()
+            # renpy.retain_after_load()
             renpy.restart_interaction()
 
         # 桌面区索引范围

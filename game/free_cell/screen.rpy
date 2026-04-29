@@ -21,7 +21,7 @@ screen free_cell_game_screen():
             for col in range(8, 12):
                 if game.piles[col]:
                     for row, card in enumerate(game.piles[col]):
-                        use foundations_card(card, col, row)
+                        use foundations_card(card, col, row) id ("F_%d:%d_%d:%s" % (game.shuffle_count, col, row, card.name))
                 else:
                     use foundations_empty_cell(col)
 
@@ -68,6 +68,6 @@ screen free_cell_game_screen():
                                 #     text "%d" % len(col)
                                 textbutton "新游戏｜随机":
                                     action Function(game.shuffle)
-                                textbutton "DEBUG 快速胜利":
-                                    action Function(game.debug_quick_win)
+                                # textbutton "DEBUG 快速胜利":
+                                #     action Function(game.debug_quick_win)
                                 # text "shuffle_count: [game.shuffle_count]"
