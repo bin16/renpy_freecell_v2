@@ -41,3 +41,6 @@ init python:
                 return PADDING
             else:
                 return PADDING
+
+        def card(self, col, row):
+            return self.piles[col][row]
