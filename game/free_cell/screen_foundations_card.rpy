@@ -23,6 +23,7 @@ init python:
                 for drag in drags:
                     x = game.xpos_of(col)
                     y = PADDING
+                    drag.top()
                     drag.snap(x, y, delay=.2)
                 return
 
@@ -44,6 +45,7 @@ init python:
                 for drag in drags:
                     x = game.xpos_of(col)
                     y = PADDING
+                    drag.top()
                     drag.snap(x, y, delay=.2)
         return callback
 
@@ -77,6 +79,7 @@ init python:
             drag._click_move_target = target_col
             x = game.xpos_of(target_col)
             y = game.ypos_of(target_col)
+            drag.top()
             drag.snap(x, y, delay=.2)
         return callback
 
@@ -105,6 +108,6 @@ screen foundations_empty_cell(col=12):
         xpos game.xpos_of(col)
         ypos game.ypos_of(col)
 
-        dropped handle_drop_on_foundations(col)
+        # dropped handle_drop_on_foundations(col)
 
         use empty_cell()

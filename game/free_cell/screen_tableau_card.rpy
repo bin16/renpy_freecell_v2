@@ -16,6 +16,7 @@ init python:
                 for i, drag in enumerate(drags):
                     x = game.xpos_of(from_col)
                     y = game.ypos_of(from_col, from_row + i)
+                    drag.top()
                     drag.snap(x, y, delay=.2)
         return callback
 
@@ -51,6 +52,7 @@ init python:
                 for i, drag in enumerate(drags):
                     x = game.xpos_of(col)
                     y = game.ypos_of(col, row + i)
+                    drag.top()
                     drag.snap(x, y, delay=.2)
                 return
 
@@ -76,6 +78,7 @@ init python:
                 for i, drag in enumerate(drags):
                     x = game.xpos_of(col)
                     y = game.ypos_of(col, row + i)
+                    drag.top()
                     drag.snap(x, y, delay=.2)
                 return
 
@@ -87,6 +90,7 @@ init python:
                 for i, drag in enumerate(drags):
                     x = game.xpos_of(col)
                     y = game.ypos_of(col, row + i)
+                    drag.top()
                     drag.snap(x, y, delay=.2)
         return callback
 

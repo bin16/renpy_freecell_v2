@@ -15,6 +15,7 @@ init python:
                 for drag in drags:
                     x = game.xpos_of(from_col)
                     y = game.ypos_of(from_col)
+                    drag.top()
                     drag.snap(x, y, delay=.2)
         return callback
 
@@ -25,6 +26,7 @@ init python:
                 for drag in drags:
                     x = game.xpos_of(col)
                     y = game.ypos_of(col)
+                    drag.top()
                     drag.snap(x, y, delay=.2)
                 return
 
@@ -48,6 +50,7 @@ init python:
                 for drag in drags:
                     x = game.xpos_of(col)
                     y = game.ypos_of(col)
+                    drag.top()
                     drag.snap(x, y, delay=.2)
         return callback
 
@@ -80,7 +83,8 @@ init python:
                 return
             drag._click_move_target = target_col
             x = game.xpos_of(target_col)
-            y = game.ypos_of(target_col)
+            y = game.ypos_of(target_col, len(game.piles[target_col]))
+            drag.top()
             drag.snap(x, y, delay=.2)
         return callback
 

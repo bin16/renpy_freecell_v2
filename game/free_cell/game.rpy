@@ -13,6 +13,7 @@ init python:
             # 索引 0-7 桌面区，索引 8-11 回收区，索引 12-15 中转区
             self.piles = [[] for _ in range(16)]
             self.shuffle_count = 0
+            self.move_count = 0
             self.shuffle()
 
         def shuffle(self):
@@ -33,6 +34,7 @@ init python:
             self.piles[6] = cards[40:46]
             self.piles[7] = cards[46:52]
             self.shuffle_count += 1
+            self.move_count = 0
             renpy.retain_after_load()
             renpy.restart_interaction()
 
@@ -50,6 +52,7 @@ init python:
                 Card(Card.CLUBS, 13),
             ]
             self.shuffle_count += 1
+            self.move_count = 0
             renpy.retain_after_load()
             renpy.restart_interaction()
 
@@ -173,9 +176,28 @@ init python:
             self.piles[from_col][from_row:from_row + len(cards)] = []
             # 追加到目标位置
             self.piles[to_col].extend(cards)
+            self.move_count += 1
 
             renpy.retain_after_load()
             renpy.restart_interaction()
+
+        def is_won(self):
+            """是否已胜利（所有 52 张牌都在回收区）"""
+            return all(len(self.piles[col]) == 13 for col in self.FOUNDATION_RANGE)
+
+        def is_game_over(self):
+            """是否已失败（桌面区无法移动且无空列可放）"""
+            if self.is_won():
+                return False
+            # 检查桌面区是否还有可移动的牌
+            for col in self.TABLEAU_RANGE:
+                if not self.piles[col]:
+                    continue
+                # 检查最底部的牌是否可以移动
+                for card in self.piles[col]:
+                    if self.find_click_move_target(card, col, self.piles[col].index(card))[0] is not None:
+                        return False
+            return True
 
         # ========== 点击移动查找 ==========
 
