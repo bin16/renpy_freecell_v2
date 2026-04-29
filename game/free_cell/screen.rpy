@@ -19,7 +19,8 @@ screen free_cell_game_screen():
             # 回收区（索引 8-11）
             for col in range(8, 12):
                 if game.piles[col]:
-                    use foundations_card(game.piles[col][-1], col)
+                    for row, card in enumerate(game.piles[col]):
+                        use foundations_card(card, col, row)
                 else:
                     use foundations_empty_cell(col)
 
@@ -34,8 +35,8 @@ screen free_cell_game_screen():
             drag:
                 draggable False
                 droppable False
-                xpos 20
-                ypos 800
+                xpos 0
+                ypos 900
                 frame:
                     xalign .5
                     yalign 1.0
@@ -46,13 +47,11 @@ screen free_cell_game_screen():
                             label "桌面区"
                             for col in game.piles[:8]:
                                 text "%d" % len(col)
-                        hbox:
-                            spacing 4
                             label "中转区"
                             for col in game.piles[12:16]:
                                 text "%d" % len(col)
-                        hbox:
-                            spacing 4
                             label "回收区"
                             for col in game.piles[8:12]:
                                 text "%d" % len(col)
+                            textbutton "新游戏｜随机":
+                                action Function(game.shuffle)

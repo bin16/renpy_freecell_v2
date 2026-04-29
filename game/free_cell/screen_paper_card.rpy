@@ -1,7 +1,6 @@
 # paper card to display
-screen paper_card(card, size = "sm"):
+screen paper_card(card):
     frame:
-        # background Solid("#e92")
         xysize (CARD_WIDTH, CARD_HEIGHT)
         text card.name:
             xalign 0

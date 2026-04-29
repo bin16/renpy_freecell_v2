@@ -11,9 +11,9 @@ init python:
                 game.move_cards([card], from_col, from_row, col)
                 return
             else:
-                for i, drag in enumerate(drags):
+                for drag in drags:
                     x = game.xpos_of(from_col)
-                    y = game.ypos_of(from_col, from_row + i)
+                    y = PADDING
                     drag.snap(x, y, delay=.2)
         return callback
 
@@ -22,7 +22,7 @@ init python:
             if not drop:
                 for drag in drags:
                     x = game.xpos_of(col)
-                    y = game.ypos_of(col)
+                    y = PADDING
                     drag.snap(x, y, delay=.2)
                 return
 
@@ -43,7 +43,7 @@ init python:
             else:
                 for drag in drags:
                     x = game.xpos_of(col)
-                    y = game.ypos_of(col)
+                    y = PADDING
                     drag.snap(x, y, delay=.2)
         return callback
 
@@ -81,15 +81,19 @@ init python:
         return callback
 
 
-screen foundations_card(card, col=12):
+screen foundations_card(card, col=12, row=0):
+    # 回收区的牌全部堆叠展示，只有最上面那张可拖拽
     drag:
-        draggable True
+        draggable (row == len(game.piles[col]) - 1)
         drag_name card.name
         xpos game.xpos_of(col)
-        ypos game.ypos_of(col)
-        dragged handle_foundation_card_dragged(card, col)
-        snapped handle_foundation_card_snapped(card, col)
-        clicked handle_foundation_card_clicked(card, col)
+        ypos PADDING + (len(game.piles[col]) - 1 - row) * MINI_CARD_HEIGHT
+
+        if row == len(game.piles[col]) - 1:
+            # 只有最顶的牌可以响应拖拽和点击
+            dragged handle_foundation_card_dragged(card, col)
+            snapped handle_foundation_card_snapped(card, col)
+            clicked handle_foundation_card_clicked(card, col)
 
         use paper_card(card)
 
