@@ -73,13 +73,13 @@ init python:
             from_col, from_row = result
             target_col, reason = game.find_click_move_target(card, from_col, from_row)
             if reason == game.MOVE_NO_SPACE:
-                renpy.notify("空间不足")
+                renpy.notify(_("空间不足"))
                 return
             if reason == game.MOVE_INVALID_SEQUENCE:
-                renpy.notify("无法移动")
+                renpy.notify(_("无法移动"))
                 return
             if target_col is None:
-                renpy.notify("无处可放")
+                renpy.notify(_("无处可放"))
                 return
             drag._click_move_target = target_col
             x = game.xpos_of(target_col)

@@ -325,3 +325,17 @@ translate english strings:
     # game/screens.rpy:1512
     old "菜单"
     new "Menu"
+
+translate english strings:
+
+    # game/screens.rpy:730
+    old "语言"
+    new "Language"
+
+    # game/screens.rpy:731
+    old "中文"
+    new "Chinese"
+
+    # game/screens.rpy:732
+    old "English"
+    new "English"

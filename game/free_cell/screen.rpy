@@ -66,7 +66,7 @@ screen free_cell_game_screen():
                                 # label "回收区"
                                 # for col in game.piles[8:12]:
                                 #     text "%d" % len(col)
-                                textbutton "新游戏｜随机":
+                                textbutton _("新游戏｜随机"):
                                     action Function(game.shuffle)
                                 # textbutton "DEBUG 快速胜利":
                                 #     action Function(game.debug_quick_win)
