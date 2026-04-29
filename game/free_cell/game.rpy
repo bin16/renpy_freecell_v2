@@ -156,37 +156,42 @@ init python:
 
         # ========== 点击移动查找 ==========
 
+        # 点击移动失败原因
+        MOVE_NO_TARGET = 0
+        MOVE_INVALID_SEQUENCE = 1
+        MOVE_NO_SPACE = 2
+
         def find_click_move_target(self, card, col, row):
-            """查找点击 card 后可以移动到的目标位置，按优先级返回第一个有效的 to_col，或 None"""
+            """查找点击 card 后可以移动到的目标位置，按优先级返回 (to_col, reason) 或 (None, reason)"""
             cards = self.piles[col][row:]
 
             # 检查是否构成合法序列
             if not self.is_valid_sequence(cards):
-                return None
+                return (None, self.MOVE_INVALID_SEQUENCE)
             # 检查 supermove 限制
             if len(cards) > self.max_moveable_cards():
-                return None
+                return (None, self.MOVE_NO_SPACE)
 
             # 1. 回收区（只接受单张牌）
             if len(cards) == 1:
                 for target_col in self.FOUNDATION_RANGE:
                     if self.can_move_to(cards, target_col):
-                        return target_col
+                        return (target_col, None)
 
             # 2. 桌面区（堆叠到某张牌下面）
             for target_col in self.TABLEAU_RANGE:
                 if len(self.piles[target_col]) > 0 and self.can_move_to(cards, target_col):
-                    return target_col
+                    return (target_col, None)
 
             # 3. 桌面区空列
             for target_col in self.TABLEAU_RANGE:
                 if len(self.piles[target_col]) == 0 and self.can_move_to(cards, target_col):
-                    return target_col
+                    return (target_col, None)
 
             # 4. 中转区（只接受单张牌）
             if len(cards) == 1:
                 for target_col in self.FREECELL_RANGE:
                     if self.can_move_to(cards, target_col):
-                        return target_col
+                        return (target_col, None)
 
-            return None
+            return (None, self.MOVE_NO_TARGET)

@@ -92,11 +92,18 @@ init python:
 
     def handle_tableau_card_clicked(card, col, row):
         def callback(drag):
-            target_col = game.find_click_move_target(card, col, row)
-            if target_col is None:
+            target_col, reason = game.find_click_move_target(card, col, row)
+            if reason == game.MOVE_NO_SPACE:
+                renpy.notify("空间不足")
                 return
-            cards = game.piles[col][row:]
+            if reason == game.MOVE_INVALID_SEQUENCE:
+                renpy.notify("无法移动")
+                return
+            if target_col is None:
+                renpy.notify("无处可放")
+                return
 
+            cards = game.piles[col][row:]
             # 标记 click-move 目标，snapped 中用于更新数据
             drag._click_move_target = target_col
 
