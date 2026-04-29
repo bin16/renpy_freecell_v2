@@ -1,4 +1,6 @@
-# 使用 renpy 实现空当接龙的尝试
+# 使用 Ren'Py 实现空当接龙游戏的尝试
+
+![空当接龙游戏截图](screenshot0003.png)
 
 ## 数据结构
 
@@ -6,7 +8,7 @@
 
 查看 `game/free_cell/card.rpy`
 
-### 游戏
+### Game
 
 查看 `game/free_cell/game.rpy`
 
