@@ -11,7 +11,7 @@
 ##
 ## 带有 _() 的字符串表示其可被翻译。
 
-define config.name = _("renpy_freecell_v2")
+define config.name = _("空当接龙")
 
 
 ## 决定上面给出的标题是否显示在标题界面屏幕。设置为 False 来隐藏标题。
@@ -28,6 +28,7 @@ define config.version = "1.0"
 ## 行。
 
 define gui.about = _p("""
+一个使用 Ren'Py 引擎制作的空当接龙游戏。
 """)
 
 

@@ -33,6 +33,7 @@ init python:
             self.piles[6] = cards[40:46]
             self.piles[7] = cards[46:52]
             self.shuffle_count += 1
+            renpy.retain_after_load()
             renpy.restart_interaction()
 
         # 桌面区索引范围
@@ -156,6 +157,7 @@ init python:
             # 追加到目标位置
             self.piles[to_col].extend(cards)
 
+            renpy.retain_after_load()
             renpy.restart_interaction()
 
         # ========== 点击移动查找 ==========
