@@ -87,7 +87,7 @@ screen foundations_card(card, col=12, row=0):
         draggable (row == len(game.piles[col]) - 1)
         drag_name card.name
         xpos game.xpos_of(col)
-        ypos PADDING + (len(game.piles[col]) - 1 - row) * MINI_CARD_HEIGHT
+        ypos game.ypos_of(col)
 
         if row == len(game.piles[col]) - 1:
             # 只有最顶的牌可以响应拖拽和点击
