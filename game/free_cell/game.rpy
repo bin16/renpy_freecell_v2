@@ -10,13 +10,14 @@ init python:
             # 16个区域，每个区域是一个 list
             # 索引 0-7 桌面区，索引 8-11 回收区，索引 12-15 中转区
             self.piles = [[] for _ in range(16)]
-            self.piles[1] = [
-                Card(Card.DIAMONDS, 2),
-                Card(Card.DIAMONDS, 1),
-            ]
             self.piles[2] = [
                 Card(Card.HEARTS, 2),
                 Card(Card.HEARTS, 1),
+            ]
+            self.piles[3] = [
+                Card(Card.CLUBS, 3),
+                Card(Card.DIAMONDS, 2),
+                Card(Card.SPADES, 1),
             ]
 
         # 桌面区索引范围
@@ -139,3 +140,5 @@ init python:
             self.piles[from_col][from_row:from_row + len(cards)] = []
             # 追加到目标位置
             self.piles[to_col].extend(cards)
+
+            renpy.restart_interaction()

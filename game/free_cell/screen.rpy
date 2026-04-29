@@ -30,3 +30,29 @@ screen free_cell_game_screen():
                         use tableau_card(card, i, j)
 
             use demo_card()
+
+            drag:
+                draggable False
+                droppable False
+                xpos 20
+                ypos 800
+                frame:
+                    xalign .5
+                    yalign 1.0
+                    vbox:
+                        spacing 4
+                        hbox:
+                            spacing 4
+                            label "桌面区"
+                            for col in game.piles[:8]:
+                                text "%d" % len(col)
+                        hbox:
+                            spacing 4
+                            label "中转区"
+                            for col in game.piles[12:16]:
+                                text "%d" % len(col)
+                        hbox:
+                            spacing 4
+                            label "回收区"
+                            for col in game.piles[8:12]:
+                                text "%d" % len(col)

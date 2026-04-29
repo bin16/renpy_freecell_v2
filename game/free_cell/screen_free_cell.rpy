@@ -9,6 +9,7 @@ init python:
 
             if game.can_move_to([card], col):
                 game.move_cards([card], from_col, from_row, col)
+                return
             else:
                 for i, drag in enumerate(drags):
                     x = game.xpos_of(from_col)
@@ -26,6 +27,7 @@ init python:
 
             if game.can_move_to([card], col):
                 game.move_cards([card], from_col, from_row, col)
+                return
             else:
                 for i, drag in enumerate(drags):
                     x = game.xpos_of(from_col)

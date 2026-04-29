@@ -10,6 +10,7 @@ init python:
             # 尝试移动（单张牌）
             if game.can_move_to([card], col):
                 game.move_cards([card], from_col, from_row, col)
+                return
             else:
                 # 归位
                 for i, drag in enumerate(drags):
@@ -68,6 +69,7 @@ init python:
 
             if to_col is not None and game.can_move_to(cards, to_col):
                 game.move_cards(cards, col, row, to_col)
+                return
             else:
                 # 归位
                 for i, drag in enumerate(drags):
