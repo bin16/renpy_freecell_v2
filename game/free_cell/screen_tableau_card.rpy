@@ -98,7 +98,7 @@ init python:
             # 标记 click-move 目标，snapped 中用于更新数据
             drag._click_move_target = target_col
             x = game.xpos_of(target_col)
-            y = game.ypos_of(target_col)
+            y = game.ypos_of(target_col, len(game.piles[target_col]))
             drag.snap(x, y, delay=.2)
         return callback
 
