@@ -10,15 +10,26 @@ init python:
             # 16个区域，每个区域是一个 list
             # 索引 0-7 桌面区，索引 8-11 回收区，索引 12-15 中转区
             self.piles = [[] for _ in range(16)]
-            self.piles[2] = [
-                Card(Card.HEARTS, 2),
-                Card(Card.HEARTS, 1),
-            ]
-            self.piles[3] = [
-                Card(Card.CLUBS, 3),
-                Card(Card.DIAMONDS, 2),
-                Card(Card.SPADES, 1),
-            ]
+            self.shuffle()
+
+        def shuffle(self):
+            self.piles = [[] for _ in range(16)]
+            cards = []
+            for i in range (13):
+                cards.append(Card(Card.HEARTS, 1 + i))
+                cards.append(Card(Card.SPADES, 1 + i))
+                cards.append(Card(Card.DIAMONDS, 1 + i))
+                cards.append(Card(Card.CLUBS, 1 + i))
+            renpy.random.shuffle(cards)
+            self.piles[0] = cards[:7]
+            self.piles[1] = cards[7:14]
+            self.piles[2] = cards[14:21]
+            self.piles[3] = cards[21:28]
+            self.piles[4] = cards[28:34]
+            self.piles[5] = cards[34:40]
+            self.piles[6] = cards[40:46]
+            self.piles[7] = cards[46:52]
+
 
         # 桌面区索引范围
         TABLEAU_RANGE = range(0, 8)
@@ -112,7 +123,7 @@ init python:
                 # 目标列非空：最底部的牌必须与 cards[0] 颜色不同且数字差 1
                 target_top = self.piles[target_col][-1]
                 return (cards[0].is_red() != target_top.is_red() and
-                        cards[0].num_diff(target_top) == -1)
+                        cards[0].num_diff(target_top) == 1)
 
             # 回收区：只接受单张牌
             if target_col in self.FOUNDATION_RANGE:
