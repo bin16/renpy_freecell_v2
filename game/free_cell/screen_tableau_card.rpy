@@ -67,7 +67,10 @@ init python:
                 if result:
                     to_col = result[0]
 
-            if to_col is not None and game.can_move_to(cards, to_col):
+            if to_col is None:
+                return
+
+            if game.can_move_to(cards, to_col):
                 game.move_cards(cards, col, row, to_col)
                 return
             else:
@@ -105,7 +108,7 @@ screen tableau_empty_cell(col=0):
         xpos game.xpos_of(col)
         ypos game.ypos_of(col, 0)
 
-        if len(game.piles[col]) == 0:
-            dropped handle_drop_on_tableau_empty_cell(col)
+        # if len(game.piles[col]) == 0:
+        #     dropped handle_drop_on_tableau_empty_cell(col)
 
         use empty_cell()

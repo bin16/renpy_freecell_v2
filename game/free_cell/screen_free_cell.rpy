@@ -110,7 +110,7 @@ screen free_cell_card(card, col=12):
         ypos game.ypos_of(col)
         dragged handle_freecell_card_dragged(card, col)
 
-        use paper_card(card, size = "lg")
+        use paper_card(card)
 
 screen free_cell_empty_cell(col=12):
     drag:
@@ -131,7 +131,7 @@ screen foundations_card(card, col=12):
         ypos game.ypos_of(col)
         dragged handle_foundation_card_dragged(card, col)
 
-        use paper_card(card, size = "lg")
+        use paper_card(card)
 
 screen foundations_empty_cell(col=12):
     drag:
