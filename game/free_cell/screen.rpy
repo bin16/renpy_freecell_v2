@@ -10,29 +10,23 @@ screen free_cell_game_screen():
         ysize DESKTOP_HEIGHT
         draggroup:
             # 中转区
-            use empty_cell(8)
-            use empty_cell(9)
-            use empty_cell(10)
-            use empty_cell(11)
+            use free_cell_empty_cell(8)
+            use free_cell_empty_cell(9)
+            use free_cell_empty_cell(10)
+            use free_cell_empty_cell(11)
 
             # 回收区
-            use empty_cell(12)
-            use empty_cell(13)
-            use empty_cell(14)
-            use empty_cell(15)
+            use foundations_empty_cell(12)
+            use foundations_empty_cell(13)
+            use foundations_empty_cell(14)
+            use foundations_empty_cell(15)
 
             # 桌面区
             for i, col in enumerate(game.piles[:8]):
-                use empty_cell(i)
+                use tableau_empty_cell(i)
+                if col and len(col) > 0:
+                    for j, card in enumerate(col):
+                        # 第 i 列，第 j 张纸牌
+                        use tableau_card(card, i, j)
 
-screen empty_cell(index = 0):
-    drag:
-        xpos game.xpos_of(index)
-        ypos game.ypos_of(index)
-        draggable False
-        frame:
-            xysize (CARD_WIDTH, CARD_HEIGHT)
-            background Solid("#eee")
-            text "[[     ]":
-                xalign .5
-                yalign .5
+            use demo_card()

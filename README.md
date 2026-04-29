@@ -1,64 +1,72 @@
 # 使用 renpy 实现空当接龙的尝试
 
+## 数据结构
+
+### Card
+
+查看 `game/free_cell/card.rpy`
+
+### 游戏
+
+查看 `game/free_cell/game.rpy`
+
+### 配置信息
+
+查看 `game/free_cell/config.rpy`
+
 ## 引擎与交互
 
-### 点击移动
-
-点击一张牌时，优先考虑能否放进回收区，其次能否放在桌面区的某张牌下面，其次看能否放在桌面区的空位，最后看能不能放在回收区。
+使用 `draggroup` 以及 `drag` 处理纸牌的拖拽和点击行为。
 
 ### 拖拽与点击
 
-```renpy
-init python:
-    handle_card_drop(drags, drop):
-        if not drop:
-            # 纸牌归位
-            drags[0].snap(drags[0].start_x, drags[0].start_y)
-            # 注意：对于拖拽一叠牌的情况下，也要归位其他纸牌
-            # 注意：使用 drag_joined 跟随移动的纸牌，他们的 start_x start_y 是 0
-            pass
-        # 变更纸牌的位置
-        return
+使用 `Drag.dragged(drags, drop)` 处理纸牌的拖拽事件，或者，使用 `Drag.dropped(drop, drags)` 处理纸牌的放置事件。
 
-    # 当点击一张纸牌
-    handle_card_tap(drag):
-        # 只有当纸牌位于某个队列的末尾的时候，才响应点击行为
-        # 顺序查找可以移动的目标位置
-        # 移动纸牌或者给出提示
-        # 对于回收区，不响应点击，只允许拖动
-        pass
+如果放置位置不合法，使用 `Drag.snap(x, y, delay)` 将纸牌归位。注意：如果有多张纸牌在拖动，也要一起归位。
 
-    # 这个函数，用于查找这张牌「后面」的牌
-    # 用于一次移动一整叠牌
-    handle_card_joined(drag):
-        joined_list = [(drag, 0, 0)]
-        # TODO: 查找后面的牌，按照顺序排列，注意 y 的偏移
-        return joined_list
+使用 `Drag.draggable` 禁用不可拖动的纸牌。
 
-screen deck:
-    # draggroup 的子元素只可以是 drag
-    # 对于不能参与互动的纸牌，禁用它的 draggable
-    draggroup:
-        drag:
-            drag_name "s:1"
-            xpos 100
-            ypos 100
+使用 `Drag.drag_joined(drag) ->  [ (drag, x, y) ]` 连带其他纸牌一同移动，用于处理拖拽一叠纸牌的情况。
 
-            draggable True # 对于不能移动的牌，设置为 False
-            drag_raise False # 对于移动一整叠牌的时候，似乎不太需要这样做
-            dragged handle_card_drop
-            drag_joined handle_card_joined
-            clicked handle_card_tap
+### 点击移动
 
-            frame:
-                xsize 100
-                ysize 100
-                background Solid("#eee")
-                text "♠️A":
-                    xalign .5
-                    yalign .5
-```
+点击一张牌时的处理顺序：
 
-### 数据管理
+1. 单张牌（没有更多牌压在上面），优先考虑能否放进回收区；
+2. 单张或者整叠牌，能否放在桌面区的某张牌下面（花色数字匹配；有足够的空位完成 supermove）；
+3. 单张或者整叠牌，看能否放在桌面区的空位（检查是否有足够的空位进行 supermove）；
+4. 单张牌，能不能放在中转区；
 
-理论上，需要一个全局的 object 存储所有纸牌的位置关系，然后计算 x y 布置 drag 元素。
+使用 `Drag.clicked(drag)` 处理纸牌的点击事件。
+
+使用 `Drag.snap(x, y, delay)` 呈现纸牌的移动过程。
+
+使用 `Drag.snapped(drag, x, y, completed)` 在纸牌移动结束后变更游戏数据。
+
+### 移动动画
+
+使用 `Drag.snap(x, y, delay)` 处理纸牌的移动，使用 `Drag.snapped(drag, x, y, completed)` 在纸牌移动结束后变更游戏数据。
+
+## 文件管理
+
+空当接龙相关的文件放在 `game/free_cell/` 中。
+
+每个组件（界面），放在不同的文件中，以 `screen_` 开头，例如 `screen_card.rpy`. 组件用到的 python 函数定义，与组件放在同一文件中，位于文件开头。
+
+游戏的主要组件（界面），全局的 game 状态，放在 `game/free_cell/screen.rpy`.
+
+## 界面布局
+
+查看 `game/free_cell/config.rpy`.
+
+游戏画布 1920x1080, 留有一圈 `PADDING`.
+
+纸牌有两种高度，一种是全高 `CARD_HEIGHT`，一种是堆叠后的高度 `MINI_CARD_HEIGHT`.
+
+纸牌的列与列之间，中转区与桌面区，回收区与桌面区，的间距都是 `GAP`
+
+中转区位于左上角。
+
+回收区位于右上角。
+
+桌面区紧靠中转区与回收区，居中。
