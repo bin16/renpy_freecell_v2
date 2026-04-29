@@ -4,62 +4,61 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Ren'Py (v8.5.2) visual novel project that implements a FreeCell solitaire game. The project is written in Chinese and uses Ren'Py's drag-and-drop system for card interactions.
+A FreeCell solitaire game implemented with Ren'Py (v8.5.2). Uses Ren'Py's `draggroup`/`drag` system for card interactions.
 
 ## Common Commands
 
-### Running the Game
 ```bash
 renpy /path/to/renpy_freecell_v2
 ```
-Or open the Ren'Py launcher and select this project.
-
-### Building Distributions
-Use Ren'Py's built-in distribution building through the Ren'Py launcher (Build Distributions).
 
 ## Architecture
 
-### Key Files
-- `game/free_cell/game.rpy` - Core FreeCell game logic (FreeCellGame class)
-- `game/script.rpy` - Entry point with `start` label
-- `game/screens.rpy` - All screens (main menu, save/load, preferences, etc.)
-- `game/gui.rpy` - GUI configuration and styling (1920x1080 base resolution)
-- `game/options.rpy` - Game settings (name, version, transitions, etc.)
+### File Structure — `game/free_cell/`
 
-### Card Interaction System
-The game uses Ren'Py's `draggroup` and `drag` system for cards:
-- `handle_card_drop(drags, drop)` - Called when a card is dropped
-- `handle_card_tap(drag)` - Called when a card is clicked
-- `handle_card_joined(drag)` - Returns list of cards dragged together as a stack
-
-Card placement priority (from README):
-1. Foundation (回收区) - cards placed by clicking
-2. Tableau (桌面区) - cards placed beneath other cards
-3. Empty tableau slots
-4. Foundation via dragging
-
-### Data Model
-- `FreeCellGame` class in `init python:` block manages all card state and position relationships
-- Cards are displayed using Ren'Py's drag elements with `drag_name`, `xpos`, `ypos`, `draggable`, etc.
-
-### GUI System
-- Base resolution: 1920x1080
-- Font: SourceHanSansLite.ttf (思源黑体)
-- Phone variant GUI assets exist in `game/gui/phone/`
-- Touch/small variant overrides styles for mobile devices
-
-### Directory Structure
 ```
-game/
-  free_cell/        # FreeCell-specific code
-    game.rpy         # Core game logic
-  gui/              # GUI assets and styling
-    phone/          # Mobile GUI variants
-  tl/None/          # Translation files
-  cache/            # Ren'Py bytecode cache
-  saves/            # Save files
-  script.rpy        # Entry point
-  screens.rpy       # All screens
-  gui.rpy           # GUI init and styling
-  options.rpy       # Game options
+free_cell/
+  card.rpy          # Card class definition
+  config.rpy        # Layout constants (CARD_WIDTH, GAP, PADDING, etc.)
+  game.rpy          # FreeCellGame class, game state, xpos_of/ypos_of helpers
+  screen.rpy        # Main screen free_cell_game_screen, defines `default game = FreeCellGame()`
+  screen_*.rpy      # Individual screen components
 ```
+
+### Key Classes
+
+**`Card`** (`card.rpy`):
+- `Card(suit, number)` — suit 0-3, number 1-13
+- `card.is_red()` — hearts/diamonds return True
+- `card.name` — property returning "♥️A", "♠️10" etc.
+- `card.num_diff(other)` — returns `other.number - self.number`; diff == -1 means stackable
+
+**`FreeCellGame`** (`game.rpy`):
+- `game.piles` — 16 lists indexed 0-15:
+  - 0-7: tableau (8 columns)
+  - 8-11: foundation (4 piles)
+  - 12-15: freecell (4 cells)
+- `game.xpos_of(col_index)`, `game.ypos_of(col_index, row_index=0)` — pixel positions
+- `TABLEAU_RANGE`, `FOUNDATION_RANGE`, `FREECELL_RANGE` — range constants for iteration
+
+### Layout Constants (`config.rpy`)
+
+- Canvas: 1920x1080, with `PADDING` margin
+- Card sizes: `CARD_WIDTH=150`, `CARD_HEIGHT=200`, `MINI_CARD_HEIGHT=50` (stacked)
+- `GAP=32` between columns
+- Freel cells: top-left; Foundations: top-right; Tableau: centered below
+
+### Card Interaction
+
+- `Drag.dragged(drags, drop)` — handle drag events; use `Drag.snap()` to snap back if invalid
+- `Drag.drag_joined(drag) -> [(drag, x, y)]` — drag multiple stacked cards together
+- `Drag.snapped(drag, x, y, completed)` — update game data after move completes
+
+Click-to-move priority: foundation → tableau stack → tableau empty → freecell (single card only)
+
+### Standard Ren'Py Files
+
+- `game/script.rpy` — entry point with `start` label
+- `game/screens.rpy` — all screens (main menu, save/load, preferences, etc.)
+- `game/gui.rpy` — GUI config (1920x1080 base, SourceHanSansLite font, phone variant)
+- `game/options.rpy` — game settings

@@ -44,3 +44,98 @@ init python:
 
         def card(self, col, row):
             return self.piles[col][row]
+
+        # ========== 查找方法 ==========
+
+        def find_card(self, card_name):
+            """通过 card.name 查找纸牌位置，返回 (col, row) 或 None"""
+            for col in range(16):
+                for row, c in enumerate(self.piles[col]):
+                    if c.name == card_name:
+                        return (col, row)
+            return None
+
+        def find_empty(self, name):
+            """通过空位的 drag_name（如 'FREE:12'）查找列索引，或 None"""
+            # name 格式: "FREE:col"
+            if name.startswith("FREE:"):
+                try:
+                    col = int(name[5:])
+                    if 0 <= col < 16 and len(self.piles[col]) == 0:
+                        return col
+                except ValueError:
+                    pass
+            return None
+
+        # ========== 空位数统计 ==========
+
+        def count_empty_freecells(self):
+            """中转区空位数"""
+            return sum(1 for col in self.FREECELL_RANGE if len(self.piles[col]) == 0)
+
+        def count_empty_tableau_cols(self):
+            """桌面区空列数"""
+            return sum(1 for col in self.TABLEAU_RANGE if len(self.piles[col]) == 0)
+
+        def max_moveable_cards(self):
+            """supermove 最多可移动的牌数"""
+            return (self.count_empty_freecells() + 1) * (2 ** self.count_empty_tableau_cols())
+
+        # ========== 序列合法性判断 ==========
+
+        def is_valid_sequence(self, cards):
+            """检查一叠牌是否合法：颜色交替、数字连续倒序"""
+            if not cards:
+                return True
+            for i in range(len(cards) - 1):
+                cur = cards[i]
+                nxt = cards[i + 1]
+                # 颜色必须不同（一个红一个黑）
+                if cur.is_red() == nxt.is_red():
+                    return False
+                # 数字必须差 1（cur 比 nxt 大 1）
+                if cur.number - nxt.number != 1:
+                    return False
+            return True
+
+        def can_move_to(self, cards, target_col):
+            """检查 cards（已验证为合法序列）能否移动到 target_col"""
+            if not cards:
+                return False
+
+            # 桌面区
+            if target_col in self.TABLEAU_RANGE:
+                # 目标列空：检查 supermove 限制
+                if len(self.piles[target_col]) == 0:
+                    return len(cards) <= self.max_moveable_cards()
+                # 目标列非空：最底部的牌必须与 cards[0] 颜色不同且数字差 1
+                target_top = self.piles[target_col][-1]
+                return (cards[0].is_red() != target_top.is_red() and
+                        cards[0].num_diff(target_top) == -1)
+
+            # 回收区：只接受单张牌
+            if target_col in self.FOUNDATION_RANGE:
+                if len(cards) != 1:
+                    return False
+                card = cards[0]
+                # 目标堆为空：只能放 A（数字 1）
+                if len(self.piles[target_col]) == 0:
+                    return card.number == 1
+                # 目标堆非空：花色相同且数字连续
+                top = self.piles[target_col][-1]
+                return card.suit == top.suit and card.number == top.number + 1
+
+            # 中转区：只接受单张牌
+            if target_col in self.FREECELL_RANGE:
+                if len(cards) != 1:
+                    return False
+                return len(self.piles[target_col]) == 0
+
+            return False
+
+        def move_cards(self, cards, from_col, from_row, to_col):
+            """将 cards 从 from_col:from_row 移动到 to_col，更新数据"""
+            # 从原位置移除
+            self.piles[from_col][from_row:from_row + len(cards)] = []
+            # 追加到目标位置
+            self.piles[to_col].extend(cards)
