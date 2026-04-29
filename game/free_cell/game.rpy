@@ -153,3 +153,35 @@ init python:
             self.piles[to_col].extend(cards)
 
             renpy.restart_interaction()
+
+        # ========== 点击移动查找 ==========
+
+        def find_click_move_target(self, card, col, row):
+            """查找点击 card 后可以移动到的目标位置，按优先级返回第一个有效的 to_col，或 None"""
+            # 只有单张牌（没有压在其上的牌）可以点击移动
+            if row != len(self.piles[col]) - 1:
+                return None
+
+            cards = [card]
+
+            # 1. 回收区（单张牌优先）
+            for target_col in self.FOUNDATION_RANGE:
+                if self.can_move_to(cards, target_col):
+                    return target_col
+
+            # 2. 桌面区（堆叠到某张牌下面）
+            for target_col in self.TABLEAU_RANGE:
+                if len(self.piles[target_col]) > 0 and self.can_move_to(cards, target_col):
+                    return target_col
+
+            # 3. 桌面区空列
+            for target_col in self.TABLEAU_RANGE:
+                if len(self.piles[target_col]) == 0 and self.can_move_to(cards, target_col):
+                    return target_col
+
+            # 4. 中转区（只接受单张牌）
+            for target_col in self.FREECELL_RANGE:
+                if self.can_move_to(cards, target_col):
+                    return target_col
+
+            return None

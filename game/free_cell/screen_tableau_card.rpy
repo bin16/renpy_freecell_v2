@@ -83,8 +83,23 @@ init python:
 
     def handle_tableau_card_snapped(col, row):
         def callback(drag, x, y, completed):
-            # 数据已在 handle_tableau_card_dragged 中更新
-            pass
+            if completed and hasattr(drag, '_click_move_target'):
+                target_col = drag._click_move_target
+                delattr(drag, '_click_move_target')
+                card = game.piles[col][row]
+                game.move_cards([card], col, row, target_col)
+        return callback
+
+    def handle_tableau_card_clicked(card, col, row):
+        def callback(drag):
+            target_col = game.find_click_move_target(card, col, row)
+            if target_col is None:
+                return
+            # 标记 click-move 目标，snapped 中用于更新数据
+            drag._click_move_target = target_col
+            x = game.xpos_of(target_col)
+            y = game.ypos_of(target_col)
+            drag.snap(x, y, delay=.2)
         return callback
 
 
@@ -98,6 +113,7 @@ screen tableau_card(card, col=0, row=0):
         dragged handle_tableau_card_dragged(card, col, row)
         snapped handle_tableau_card_snapped(col, row)
         drag_joined handle_tableau_card_drag_joined(col, row)
+        clicked handle_tableau_card_clicked(card, col, row)
 
         use paper_card(card)
 

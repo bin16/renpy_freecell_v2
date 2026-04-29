@@ -101,6 +101,58 @@ init python:
                     drag.snap(x, y, delay=.2)
         return callback
 
+    def handle_freecell_card_snapped(card, col=12):
+        def callback(drag, x, y, completed):
+            if completed and hasattr(drag, '_click_move_target'):
+                target_col = drag._click_move_target
+                delattr(drag, '_click_move_target')
+                result = game.find_card(card.name)
+                if result:
+                    from_col, from_row = result
+                    game.move_cards([card], from_col, from_row, target_col)
+        return callback
+
+    def handle_freecell_card_clicked(card, col=12):
+        def callback(drag):
+            result = game.find_card(card.name)
+            if result is None:
+                return
+            from_col, from_row = result
+            target_col = game.find_click_move_target(card, from_col, from_row)
+            if target_col is None:
+                return
+            drag._click_move_target = target_col
+            x = game.xpos_of(target_col)
+            y = game.ypos_of(target_col)
+            drag.snap(x, y, delay=.2)
+        return callback
+
+    def handle_foundation_card_snapped(card, col=12):
+        def callback(drag, x, y, completed):
+            if completed and hasattr(drag, '_click_move_target'):
+                target_col = drag._click_move_target
+                delattr(drag, '_click_move_target')
+                result = game.find_card(card.name)
+                if result:
+                    from_col, from_row = result
+                    game.move_cards([card], from_col, from_row, target_col)
+        return callback
+
+    def handle_foundation_card_clicked(card, col=12):
+        def callback(drag):
+            result = game.find_card(card.name)
+            if result is None:
+                return
+            from_col, from_row = result
+            target_col = game.find_click_move_target(card, from_col, from_row)
+            if target_col is None:
+                return
+            drag._click_move_target = target_col
+            x = game.xpos_of(target_col)
+            y = game.ypos_of(target_col)
+            drag.snap(x, y, delay=.2)
+        return callback
+
 
 screen free_cell_card(card, col=12):
     drag:
@@ -109,6 +161,8 @@ screen free_cell_card(card, col=12):
         xpos game.xpos_of(col)
         ypos game.ypos_of(col)
         dragged handle_freecell_card_dragged(card, col)
+        snapped handle_freecell_card_snapped(card, col)
+        clicked handle_freecell_card_clicked(card, col)
 
         use paper_card(card)
 
