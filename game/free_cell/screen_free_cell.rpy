@@ -1,4 +1,5 @@
 init python:
+    # TODO: delete
     def handle_drop_on_freecell(col=12):
         def callback(drop, drags):
             result = game.find_card(drags[0].drag_name)
@@ -103,6 +104,6 @@ screen free_cell_empty_cell(col=12):
         xpos game.xpos_of(col)
         ypos game.ypos_of(col)
 
-        dropped handle_drop_on_freecell(col)
+        # dropped handle_drop_on_freecell(col)
 
         use empty_cell()

@@ -55,3 +55,4 @@ screen free_cell_game_screen():
                                 text "%d" % len(col)
                             textbutton "新游戏｜随机":
                                 action Function(game.shuffle)
+                            text "shuffle_count: [game.shuffle_count]"

@@ -46,6 +46,7 @@ init python:
 
     def handle_tableau_card_dragged(card, col=0, row=0):
         def callback(drags, drop):
+            # 并非合法目标
             if not drop:
                 for i, drag in enumerate(drags):
                     x = game.xpos_of(col)
@@ -68,6 +69,14 @@ init python:
                     to_col = result[0]
 
             if to_col is None:
+                return
+
+            # 中转区只接受单张牌
+            if to_col in game.FREECELL_RANGE and len(cards) > 1:
+                for i, drag in enumerate(drags):
+                    x = game.xpos_of(col)
+                    y = game.ypos_of(col, row + i)
+                    drag.snap(x, y, delay=.2)
                 return
 
             if game.can_move_to(cards, to_col):
@@ -113,6 +122,7 @@ init python:
                     if d.drag_name == c.name:
                         x = game.xpos_of(target_col)
                         y = game.ypos_of(target_col, len(game.piles[target_col]) + i)
+                        d.top()
                         d.snap(x, y, delay=.2)
                         break
         return callback
@@ -120,9 +130,11 @@ init python:
 
 screen tableau_card(card, col=0, row=0):
     drag:
+        id "game_%s_%s_%s" % (str(game.shuffle_count), str(card.suit), str(card.number))
         drag_name card.name
         xpos game.xpos_of(col)
         ypos game.ypos_of(col, row)
+        drag_raise True
 
         draggable check_tableau_card_draggable(col, row)
         dragged handle_tableau_card_dragged(card, col, row)

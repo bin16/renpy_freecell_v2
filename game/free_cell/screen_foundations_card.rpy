@@ -93,7 +93,7 @@ screen foundations_card(card, col=12, row=0):
             # 只有最顶的牌可以响应拖拽和点击
             dragged handle_foundation_card_dragged(card, col)
             snapped handle_foundation_card_snapped(card, col)
-            clicked handle_foundation_card_clicked(card, col)
+            # clicked handle_foundation_card_clicked(card, col)
 
         use paper_card(card)
 

@@ -6,10 +6,13 @@ init python:
         # 8-11 回收区 (4堆)
         # 12-15 中转区 (4个格子)
 
+        shuffle_count = 0
+
         def __init__(self):
             # 16个区域，每个区域是一个 list
             # 索引 0-7 桌面区，索引 8-11 回收区，索引 12-15 中转区
             self.piles = [[] for _ in range(16)]
+            self.shuffle_count = 0
             self.shuffle()
 
         def shuffle(self):
@@ -29,7 +32,8 @@ init python:
             self.piles[5] = cards[34:40]
             self.piles[6] = cards[40:46]
             self.piles[7] = cards[46:52]
-
+            self.shuffle_count += 1
+            renpy.restart_interaction()
 
         # 桌面区索引范围
         TABLEAU_RANGE = range(0, 8)
