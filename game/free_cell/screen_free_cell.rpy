@@ -87,6 +87,7 @@ init python:
 
 screen free_cell_card(card, col=12):
     drag:
+        id ("game_%s_free_cell_%s_%s" % (str(game.shuffle_count), str(card.suit), str(card.number)))
         draggable True
         drag_name card.name
         xpos game.xpos_of(col)

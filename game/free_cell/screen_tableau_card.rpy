@@ -130,7 +130,7 @@ init python:
 
 screen tableau_card(card, col=0, row=0):
     drag:
-        id "game_%s_%s_%s" % (str(game.shuffle_count), str(card.suit), str(card.number))
+        id ("game_%s_tableau_%s_%s" % (str(game.shuffle_count), str(card.suit), str(card.number)))
         drag_name card.name
         xpos game.xpos_of(col)
         ypos game.ypos_of(col, row)

@@ -36,6 +36,23 @@ init python:
             renpy.retain_after_load()
             renpy.restart_interaction()
 
+        def debug_quick_win(self):
+            self.piles = [[] for _ in range(16)]
+            for i in range (12):
+                self.piles[8].append(Card(Card.HEARTS, 1 + i))
+                self.piles[9].append(Card(Card.SPADES, 1 + i))
+                self.piles[10].append(Card(Card.DIAMONDS, 1 + i))
+                self.piles[11].append(Card(Card.CLUBS, 1 + i))
+            self.piles[0] = [
+                Card(Card.HEARTS, 13),
+                Card(Card.SPADES, 13),
+                Card(Card.DIAMONDS, 13),
+                Card(Card.CLUBS, 13),
+            ]
+            self.shuffle_count += 1
+            renpy.retain_after_load()
+            renpy.restart_interaction()
+
         # 桌面区索引范围
         TABLEAU_RANGE = range(0, 8)
         # 回收区索引范围

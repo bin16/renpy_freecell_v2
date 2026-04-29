@@ -84,6 +84,7 @@ init python:
 screen foundations_card(card, col=12, row=0):
     # 回收区的牌全部堆叠展示，只有最上面那张可拖拽
     drag:
+        id ("game_%s_foundations_%s_%s" % (str(game.shuffle_count), str(card.suit), str(card.number)))
         draggable (row == len(game.piles[col]) - 1)
         drag_name card.name
         xpos game.xpos_of(col)
