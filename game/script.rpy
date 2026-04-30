@@ -4,4 +4,5 @@ define config.default_language = "english"
 
 label start:
     call screen free_cell_game_screen()
-    return
+    jump start
+    # return

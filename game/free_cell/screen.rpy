@@ -59,25 +59,31 @@ screen free_cell_game_screen():
                             spacing 4
                             hbox:
                                 spacing 4
-                                label "桌面区"
-                                for col in game.piles[:8]:
-                                    text "%d" % len(col)
-                                label "中转区"
-                                for col in game.piles[12:16]:
-                                    text "%d" % len(col)
-                                label "回收区"
-                                for col in game.piles[8:12]:
-                                    text "%d" % len(col)
+                                # label "桌面区"
+                                # for col in game.piles[:8]:
+                                #     text "%d" % len(col)
+                                # label "中转区"
+                                # for col in game.piles[12:16]:
+                                #     text "%d" % len(col)
+                                # label "回收区"
+                                # for col in game.piles[8:12]:
+                                #     text "%d" % len(col)
 
                                 imagebutton:
                                     idle "new_game_button_idle"
                                     hover "new_game_button_hover"
-                                    action Function(game.shuffle)
+                                    action [
+                                        Function(game.shuffle),
+                                        Return(),
+                                    ]
 
                                 imagebutton:
                                     idle "restart_button_idle"
                                     hover "restart_button_hover"
-                                    action Function(game.restart)
+                                    action [
+                                        Function(game.restart),
+                                        Return(),
+                                    ]
 
                                 # textbutton _("新游戏｜随机"):
                                 #     action Function(game.shuffle)
