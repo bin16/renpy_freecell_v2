@@ -1,6 +1,6 @@
 # 使用 Ren'Py 实现空当接龙游戏的尝试
 
-![空当接龙游戏截图](screenshot0020.png)
+![空当接龙游戏截图](screenshot0033.png)
 
 ## 数据结构
 

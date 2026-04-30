@@ -40,10 +40,17 @@ screen free_cell_game_screen():
                     xpos 0
                     ypos 900
                     frame:
+                        background Frame("panel.png", 12, 12)
                         hbox:
-                            label "你胜利了！"
-                            textbutton "新游戏｜随机":
-                                action Function(game.shuffle)
+                            label "你胜利了！":
+                                text_size 26
+                            imagebutton:
+                                idle "new_game_button_idle"
+                                hover "new_game_button_hover"
+                                action [
+                                    Function(game.shuffle),
+                                    Return(),
+                                ]
             else:
                 # 调试信息
                 drag:
@@ -88,7 +95,11 @@ screen free_cell_game_screen():
                                 # textbutton _("新游戏｜随机"):
                                 #     action Function(game.shuffle)
                                 # textbutton "DEBUG 快速胜利":
-                                #     action Function(game.debug_quick_win)
+                                #     text_size 24
+                                #     action [
+                                #         Function(game.debug_quick_win),
+                                #         Return(),
+                                #     ]
                                 # text "shuffle_count: [game.shuffle_count]"
 
 image new_game_button_idle:
