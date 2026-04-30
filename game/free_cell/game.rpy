@@ -1,5 +1,7 @@
 # 纸牌 class
 init python:
+    import copy
+
     class FreeCellGame:
         # 区域索引
         # 0-7  桌面区 (8列)
@@ -7,11 +9,13 @@ init python:
         # 12-15 中转区 (4个格子)
 
         shuffle_count = 0
+        backup = [[] for _ in range(16)]
 
         def __init__(self):
             # 16个区域，每个区域是一个 list
             # 索引 0-7 桌面区，索引 8-11 回收区，索引 12-15 中转区
             self.piles = [[] for _ in range(16)]
+            self.backup = [[] for _ in range(16)]
             self.shuffle_count = 0
             self.move_count = 0
             self.shuffle()
@@ -35,8 +39,20 @@ init python:
             self.piles[7] = cards[46:52]
             self.shuffle_count += 1
             self.move_count = 0
+            self.backup = copy.deepcopy(self.piles)
+
             renpy.retain_after_load()
             renpy.restart_interaction()
+
+        def restart(self):
+            if len(self.backup) == 16:
+                self.piles = [[] for _ in range(16)]
+                self.piles = copy.deepcopy(self.backup)
+                self.shuffle_count += 1
+                self.move_count = 0
+
+                renpy.retain_after_load()
+                renpy.restart_interaction()
 
         def debug_quick_win(self):
             self.piles = [[] for _ in range(16)]
